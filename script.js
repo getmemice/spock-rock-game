@@ -10,6 +10,7 @@ const playerLizard = document.getElementById("playerLizard");
 const playerSpock = document.getElementById("playerSpock");
 
 const allGameIcons = document.querySelectorAll(".far");
+const resultText = document.getElementById("resultText");
 
 const choices = {
   rock: { name: "Rock", defeats: ["scissors", "lizard"] },
@@ -19,6 +20,8 @@ const choices = {
   spock: { name: "Spock", defeats: ["scissors", "rock"] },
 };
 
+let playerScore = 0;
+let computerScore = 0;
 let computerChoice = "";
 
 // Random computer choice
@@ -44,14 +47,28 @@ function resetSelected() {
   });
 }
 
-function checkResult() {
+function checkResult(playerChoice) {
   resetSelected();
   computerRandomChoice();
-  displayComputerChoice()
+  displayComputerChoice();
+  console.log(playerChoice);
+  updateScore(playerChoice);
+}
+
+function updateScore(playerChoice) {
+  console.log(playerChoice, computerChoice);
+  if (playerChoice === computerChoice) {
+    resultText.textContent = "It's a tie!";
+  } else {
+    const choice = choices[playerChoice];
+    if (choice.defeats.includes(computerChoice))
+      resultText.textContent = "You Won!";
+    else resultText.textContent = "you lose!";
+  }
 }
 
 function select(playerChoice) {
-  checkResult();
+  checkResult(playerChoice);
   switch (playerChoice) {
     case "rock":
       playerRock.classList.add("selected");
