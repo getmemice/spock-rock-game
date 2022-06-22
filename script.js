@@ -1,3 +1,5 @@
+import { stopConfetti, startConfetti, removeConfetti } from "./confetti.js";
+
 const playerSocreEl = document.getElementById("playerScore");
 const playerChoiceEl = document.getElementById("playerChoice");
 const computerScoreEl = document.getElementById("computerScore");
@@ -45,7 +47,21 @@ function resetSelected() {
   allGameIcons.forEach((icon) => {
     icon.classList.remove("selected");
   });
+  stopConfetti();
+  removeConfetti();
 }
+
+function resetAll() {
+  playerScore = 0;
+  computerScore = 0;
+  playerSocreEl.textContent = playerScore;
+  computerScoreEl.textContent = computerScore;
+  playerChoiceEl.textContent = "";
+  computerChoiceEl.textContent = "";
+  resultText.textContent = "";
+  resetSelected();
+}
+window.resetAll = resetAll;
 
 function checkResult(playerChoice) {
   resetSelected();
@@ -56,14 +72,20 @@ function checkResult(playerChoice) {
 }
 
 function updateScore(playerChoice) {
-  console.log(playerChoice, computerChoice);
   if (playerChoice === computerChoice) {
     resultText.textContent = "It's a tie!";
   } else {
     const choice = choices[playerChoice];
-    if (choice.defeats.includes(computerChoice))
+    if (choice.defeats.includes(computerChoice)) {
       resultText.textContent = "You Won!";
-    else resultText.textContent = "you lose!";
+      playerScore++;
+      playerSocreEl.textContent = playerScore;
+      startConfetti();
+    } else {
+      resultText.textContent = "you lose!";
+      computerScore++;
+      computerScoreEl.textContent = computerScore;
+    }
   }
 }
 
@@ -121,3 +143,5 @@ function displayComputerChoice() {
       break;
   }
 }
+window.select = select;
+resetAll();
